@@ -300,6 +300,104 @@ main {
   font-size: 11px;
 }
 
+  /* record / memo mode */
+.mode-tabs {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 15px;
+}
+
+.mode-tab {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--panel);
+  color: var(--muted);
+  padding: 11px 12px;
+  font-size: 13px;
+}
+
+.mode-tab.active {
+  background: var(--panel2);
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.record-form {
+  display: none;
+}
+
+.record-form.active {
+  display: block;
+}
+
+.form-label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.mood-score {
+  margin: 17px 0;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+.score-value {
+  width: 42px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.memo-input,
+.memo-textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 12px;
+  outline: none;
+}
+
+.memo-textarea {
+  min-height: 230px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.memo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.memo-tag {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.memo-tag.selected {
+  color: var(--text);
+  border-color: var(--accent);
+}
+  
 /* chat */
 
 .chat-box {
@@ -623,9 +721,7 @@ main {
 
 </section>
 
-
-<!-- CHAT -->
-
+<!-- CHAT / RECORD -->
 <section class="screen" id="chatScreen">
 
   <div class="screen-head">
@@ -641,92 +737,237 @@ main {
 
   </div>
 
-  <div class="card">
+  <div class="mode-tabs">
 
-    <div class="card-sub">
-      その日のことや、今思っていることをそのまま残せます。
+    <button
+      class="mode-tab active"
+      id="recordModeBtn"
+      onclick="switchRecordMode('record')"
+    >
+      記録
+    </button>
+
+    <button
+      class="mode-tab"
+      id="memoModeBtn"
+      onclick="switchRecordMode('memo')"
+    >
+      メモ
+    </button>
+
+  </div>
+
+
+  <!-- 記録モード -->
+
+  <div
+    class="record-form active"
+    id="recordMode"
+  >
+
+    <div class="card">
+
+      <div class="card-sub">
+        その日のことや、今思っていることをそのまま残せます。
+      </div>
+
     </div>
 
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="typing" id="typing" hidden>
+      考え中…
+    </div>
+
+    <div class="chips" id="moodChips">
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'嬉しい・喜び')"
+      >
+        嬉しい・喜び
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'楽しい・ワクワク')"
+      >
+        楽しい・ワクワク
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'落ち着いている')"
+      >
+        落ち着いている
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'モヤモヤする')"
+      >
+        モヤモヤする
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'イライラ・怒り')"
+      >
+        イライラ・怒り
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'不安・悲しみ')"
+      >
+        不安・悲しみ
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'客観的な視点')"
+      >
+        客観的な視点
+      </button>
+
+      <button
+        class="chip"
+        onclick="selectMood(this,'事実の整理')"
+      >
+        事実の整理
+      </button>
+
+    </div>
+
+    <div class="chat-row">
+
+      <input
+        id="chatInput"
+        type="text"
+        placeholder="今思っていることを書く…"
+        autocomplete="off"
+      >
+
+      <button onclick="sendChat()">
+        送る
+      </button>
+
+    </div>
+
+    <button
+      class="primary"
+      onclick="saveCurrentRecord()"
+    >
+      今日の記録として保存
+    </button>
+
   </div>
 
-  <div class="chat-box" id="chatBox"></div>
 
-  <div class="typing" id="typing" hidden>
-    考え中…
-  </div>
+  <!-- メモモード -->
 
-  <div class="chips" id="moodChips">
+  <div
+    class="record-form"
+    id="memoMode"
+  >
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'嬉しい・喜び')"
-    >
-      嬉しい・喜び
-    </button>
+    <div class="card">
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'楽しい・ワクワク')"
-    >
-      楽しい・ワクワク
-    </button>
+      <div class="card-title">
+        自由に整理する
+      </div>
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'落ち着いている')"
-    >
-      落ち着いている
-    </button>
+      <div class="card-sub">
+        誰かに話すためじゃなくても大丈夫。
+        思いついたことを、そのまままとめておけます。
+      </div>
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'モヤモヤする')"
-    >
-      モヤモヤする
-    </button>
+    </div>
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'イライラ・怒り')"
-    >
-      イライラ・怒り
-    </button>
+    <div class="card">
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'不安・悲しみ')"
-    >
-      不安・悲しみ
-    </button>
+      <label
+        class="form-label"
+        for="memoTitle"
+      >
+        タイトル
+      </label>
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'客観的な視点')"
-    >
-      客観的な視点
-    </button>
+      <input
+        class="memo-input"
+        id="memoTitle"
+        type="text"
+        placeholder="例：今考えていること"
+      >
 
-    <button
-      class="chip"
-      onclick="selectMood(this,'事実の整理')"
-    >
-      事実の整理
-    </button>
+      <div style="height:14px;"></div>
 
-  </div>
+      <label
+        class="form-label"
+        for="memoText"
+      >
+        メモ
+      </label>
 
-  <div class="chat-row">
+      <textarea
+        class="memo-textarea"
+        id="memoText"
+        placeholder="自由に書いてみる…"
+      ></textarea>
 
-    <input
-      id="chatInput"
-      type="text"
-      placeholder="今思っていることを書く…"
-      autocomplete="off"
-    >
+      <div style="height:17px;"></div>
 
-    <button onclick="sendChat()">
-      送る
-    </button>
+      <label class="form-label">
+        タグ
+      </label>
+
+      <div class="memo-tags">
+
+        <button
+          class="memo-tag"
+          onclick="toggleMemoTag(this,'考え')"
+        >
+          考え
+        </button>
+
+        <button
+          class="memo-tag"
+          onclick="toggleMemoTag(this,'アイデア')"
+        >
+          アイデア
+        </button>
+
+        <button
+          class="memo-tag"
+          onclick="toggleMemoTag(this,'やりたい')"
+        >
+          やりたい
+        </button>
+
+        <button
+          class="memo-tag"
+          onclick="toggleMemoTag(this,'気になる')"
+        >
+          気になる
+        </button>
+
+        <button
+          class="memo-tag"
+          onclick="toggleMemoTag(this,'整理')"
+        >
+          整理
+        </button>
+
+      </div>
+
+      <button
+        class="primary"
+        onclick="saveMemo()"
+      >
+        メモを保存
+      </button>
+
+    </div>
 
   </div>
 
@@ -1584,6 +1825,173 @@ const DEMO_RECORDS = [
 const STORAGE_KEY =
   'meturea3_records';
 
+  const MEMO_STORAGE_KEY = 'meturea3_memos';
+
+let currentRecordMode = 'record';
+let selectedMemoTags = [];
+
+
+function switchRecordMode(mode) {
+  currentRecordMode = mode;
+
+  const recordMode =
+    document.getElementById('recordMode');
+
+  const memoMode =
+    document.getElementById('memoMode');
+
+  const recordButton =
+    document.getElementById('recordModeBtn');
+
+  const memoButton =
+    document.getElementById('memoModeBtn');
+
+  if (mode === 'record') {
+
+    recordMode.classList.add('active');
+    memoMode.classList.remove('active');
+
+    recordButton.classList.add('active');
+    memoButton.classList.remove('active');
+
+  } else {
+
+    recordMode.classList.remove('active');
+    memoMode.classList.add('active');
+
+    recordButton.classList.remove('active');
+    memoButton.classList.add('active');
+
+  }
+}
+
+
+function toggleMemoTag(button, tag) {
+
+  button.classList.toggle('selected');
+
+  if (
+    selectedMemoTags.includes(tag)
+  ) {
+
+    selectedMemoTags =
+      selectedMemoTags.filter(
+        item => item !== tag
+      );
+
+  } else {
+
+    selectedMemoTags.push(tag);
+
+  }
+}
+
+
+function loadMemos() {
+
+  try {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          MEMO_STORAGE_KEY
+        )
+      );
+
+    if (Array.isArray(saved)) {
+      return saved;
+    }
+
+  } catch (error) {
+
+    console.warn(
+      'メモを読み込めませんでした。',
+      error
+    );
+
+  }
+
+  return [];
+}
+
+
+function saveMemos(memos) {
+
+  localStorage.setItem(
+    MEMO_STORAGE_KEY,
+    JSON.stringify(memos)
+  );
+
+}
+
+
+function saveMemo() {
+
+  const title =
+    document
+      .getElementById('memoTitle')
+      .value
+      .trim();
+
+  const text =
+    document
+      .getElementById('memoText')
+      .value
+      .trim();
+
+  if (!text) {
+    alert('メモの内容を書いてください。');
+    return;
+  }
+
+  const now = new Date();
+
+  const time =
+    `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  const memo = {
+
+    id: Date.now(),
+
+    date: todayString(),
+
+    time,
+
+    title:
+      title || '無題のメモ',
+
+    text,
+
+    tags: [...selectedMemoTags]
+
+  };
+
+  const memos =
+    loadMemos();
+
+  memos.unshift(memo);
+
+  saveMemos(memos);
+
+  document
+    .getElementById('memoTitle')
+    .value = '';
+
+  document
+    .getElementById('memoText')
+    .value = '';
+
+  selectedMemoTags = [];
+
+  document
+    .querySelectorAll('.memo-tag')
+    .forEach(tag => {
+      tag.classList.remove('selected');
+    });
+
+  alert('メモを保存しました。');
+
+}
 
 function loadRecords() {
 
