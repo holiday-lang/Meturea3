@@ -449,6 +449,47 @@
     line-height: 1.7;
   }
 
+  .summary-highlight {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 5px 0 13px;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    border: 1px solid var(--line);
+    background: var(--panel2);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .shift-item {
+    margin-bottom: 18px;
+  }
+
+  .shift-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .shift-date {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .shift-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
   .empty {
     text-align: center;
     color: var(--muted);
@@ -702,10 +743,48 @@
   <div class="card">
     <div class="card-title">最近の記録から</div>
 
+    <div class="summary-highlight">
+      「ちゃんとしたい」と「少し休みたい」が両方ある
+    </div>
+
     <ul class="summary-list">
-      <li>気になったことを、そのまま言葉にして残している。</li>
-      <li>気分だけでなく、出来事を整理する記録もある。</li>
-      <li>あとから見返すと、その日の感じ方の違いに気づける。</li>
+      <li>やることが多いと、始める前に少し疲れてしまうことがある。</li>
+      <li>友達と話した日や、好きなことをした日は気分が上がりやすい。</li>
+      <li>一度に全部終わらせるより、小さく区切ったほうが動きやすそう。</li>
+      <li>将来のことを考える時間が増えている。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">最近よく出てくる言葉</div>
+
+    <div class="tag-list">
+      <span class="tag">勉強</span>
+      <span class="tag">学校</span>
+      <span class="tag">友達</span>
+      <span class="tag">将来</span>
+      <span class="tag">疲れた</span>
+      <span class="tag">楽しい</span>
+      <span class="tag">やりたい</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">最近増えている考え</div>
+
+    <ul class="summary-list">
+      <li>「将来、自分は何をしたいんだろう」</li>
+      <li>「やりたいことをもっと見つけたい」</li>
+      <li>「自分の時間をもう少しうまく使いたい」</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">最近減っている考え</div>
+
+    <ul class="summary-list">
+      <li>「全部完璧にやらないと意味がない」</li>
+      <li>「一日何もできなかったら失敗」</li>
     </ul>
   </div>
 
@@ -733,19 +812,78 @@
     <div class="card-title">最近気になったこと</div>
 
     <div class="timeline-card">
-      <div class="mood">興味</div>
+      <div class="mood">今</div>
       <p>
-最近考えていることや、気になったものをここに残していけます。
+ゲーム制作や創作について考える時間が増えている。
+「自分で何かを作る」ということ自体が楽しく感じられている。
+      </p>
+    </div>
+
+    <div class="timeline-card">
+      <div class="mood">少し前</div>
+      <p>
+将来のことを考えることが多かった。
+進路について調べたり、自分が何をしたいのか考えたりしていた。
       </p>
     </div>
   </div>
 
+
   <div class="card">
     <div class="card-title">移り変わりを見る</div>
 
+    <div class="shift-item">
+      <div class="shift-date">6月</div>
+      <div class="shift-title">学校・勉強</div>
+      <div class="soft">
+        日々の勉強や学校生活について考える記録が多かった。
+      </div>
+    </div>
+
+    <div class="shift-item">
+      <div class="shift-date">7月</div>
+      <div class="shift-title">趣味・ゲーム</div>
+      <div class="soft">
+        ゲームや創作について考える時間が増えた。
+      </div>
+    </div>
+
+    <div class="shift-item">
+      <div class="shift-date">8月</div>
+      <div class="shift-title">将来・進路</div>
+      <div class="soft">
+        「これから何をしたいか」というテーマが目立つようになった。
+      </div>
+    </div>
+
+    <div class="shift-item">
+      <div class="shift-date">9月</div>
+      <div class="shift-title">ゲーム制作・創作</div>
+      <div class="soft">
+        自分で世界や仕組みを作ることへの興味が強くなっている。
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-title">最近強くなった興味</div>
+
+    <div class="tag-list">
+      <span class="tag">ゲーム制作</span>
+      <span class="tag">創作</span>
+      <span class="tag">世界観づくり</span>
+      <span class="tag">新しい趣味</span>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-title">最近あまり考えなくなったこと</div>
+
     <div class="soft">
-      「前はこれが気になっていた」「今はこっちに興味がある」
-      という変化を、記録から振り返れる場所です。
+      学校行事や、その時期に一時的に気になっていたことは、
+      最近の記録では少なくなっています。
     </div>
   </div>
 
@@ -810,6 +948,7 @@ const screens = document.querySelectorAll('.screen');
 const menuOverlay = document.getElementById('menuOverlay');
 
 function showScreen(id) {
+
   screens.forEach(screen => {
     screen.classList.remove('active');
   });
@@ -831,6 +970,7 @@ function closeMenu() {
 }
 
 function openMenuScreen(id) {
+
   closeMenu();
   showScreen(id);
 
@@ -849,42 +989,120 @@ document.getElementById('menuBtn').addEventListener(
 );
 
 menuOverlay.addEventListener('click', e => {
+
   if (e.target === menuOverlay) {
     closeMenu();
   }
+
 });
 
 document.addEventListener('keydown', e => {
+
   if (e.key === 'Escape') {
     closeMenu();
   }
+
 });
 
 
 /* =========================================================
-   ローカル記録
+   架空の記録データ
 ========================================================= */
 
-const STORAGE_KEY = 'meturea3_records';
-
-function loadRecords() {
-  try {
-    return JSON.parse(
-      localStorage.getItem(STORAGE_KEY)
-    ) || [];
-  } catch {
-    return [];
+const DEMO_RECORDS = [
+  {
+    date: todayString(),
+    mood: '落ち着いている',
+    score: 6,
+    text: '朝は少し眠かった。学校では友達と話せて楽しかったけど、午後から少し疲れた。帰ってから課題をやろうと思っていたのに、スマホを触ってしまった。でも寝る前に少しだけ進められたので、今日はまあまあ。'
+  },
+  {
+    date: offsetDate(-1),
+    mood: '嬉しい・喜び',
+    score: 7,
+    text: '友達と話していたら思ったより元気になった。くだらない話だったけど、こういう時間はやっぱり楽しい。'
+  },
+  {
+    date: offsetDate(-2),
+    mood: '不安・悲しみ',
+    score: 4,
+    text: 'なんとなく将来のことを考えてしまった。まだ何も決まっていない感じがして少し落ち着かない。'
+  },
+  {
+    date: offsetDate(-3),
+    mood: '落ち着いている',
+    score: 5,
+    text: '特に大きなことはなかった普通の日。やることは多かったけど、一つずつ片づけたら意外となんとかなった。'
+  },
+  {
+    date: offsetDate(-4),
+    mood: '楽しい・ワクワク',
+    score: 8,
+    text: '久しぶりにゲームを長めに遊んだ。遊ぶだけじゃなくて、自分でもこういうゲームを作れたら面白そうだと思った。'
+  },
+  {
+    date: offsetDate(-5),
+    mood: 'モヤモヤする',
+    score: 5,
+    text: 'やりたいことはあるのに、何から始めればいいのかわからなくなった。結局あまり進まなかった。'
+  },
+  {
+    date: offsetDate(-6),
+    mood: '嬉しい・喜び',
+    score: 7,
+    text: '前から気になっていたことを少し調べた。知らなかったことがわかると、それだけでちょっと楽しい。'
+  },
+  {
+    date: offsetDate(-7),
+    mood: '落ち着いている',
+    score: 6,
+    text: '今日は比較的ゆっくり過ごせた。何もしない時間もあったけど、必要な休憩だった気がする。'
+  },
+  {
+    date: offsetDate(-9),
+    mood: '不安・悲しみ',
+    score: 4,
+    text: '進路について考えた。ちゃんと決めなきゃと思うほど、逆に何も考えられなくなる感じがした。'
+  },
+  {
+    date: offsetDate(-11),
+    mood: '楽しい・ワクワク',
+    score: 8,
+    text: '創作についていろいろ考えた。設定を考えているだけでも意外と時間が経っていてびっくりした。'
+  },
+  {
+    date: offsetDate(-14),
+    mood: 'モヤモヤする',
+    score: 5,
+    text: '勉強しようと思ったのに、なかなか集中できなかった。できなかったことばかり考えると余計に嫌になるので、今日は少しだけにした。'
+  },
+  {
+    date: offsetDate(-18),
+    mood: '嬉しい・喜び',
+    score: 7,
+    text: '好きな作品を見つけた。久しぶりに「これちょっと好きかも」と思えるものがあった。'
+  },
+  {
+    date: offsetDate(-22),
+    mood: '落ち着いている',
+    score: 6,
+    text: '普通の日だったけど、最近より少し余裕があった。焦らずやれば意外と大丈夫なのかもしれない。'
+  },
+  {
+    date: offsetDate(-27),
+    mood: '不安・悲しみ',
+    score: 4,
+    text: '将来について考える時間が増えた。まだ答えは出ていないけど、いろいろ調べてみることにした。'
   }
-}
+];
 
-function saveRecords(records) {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(records)
-  );
-}
+
+/* =========================================================
+   日付ヘルパー
+========================================================= */
 
 function todayString() {
+
   const d = new Date();
 
   const y = d.getFullYear();
@@ -894,18 +1112,67 @@ function todayString() {
   return `${y}-${m}-${day}`;
 }
 
+function offsetDate(days) {
+
+  const d = new Date();
+
+  d.setDate(d.getDate() + days);
+
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${y}-${m}-${day}`;
+}
+
+
+/* =========================================================
+   ローカル記録
+========================================================= */
+
+const STORAGE_KEY = 'meturea3_records';
+
+function loadRecords() {
+
+  try {
+
+    const saved =
+      JSON.parse(localStorage.getItem(STORAGE_KEY));
+
+    if (Array.isArray(saved) && saved.length) {
+      return saved;
+    }
+
+  } catch {}
+
+  return DEMO_RECORDS;
+}
+
+function saveRecords(records) {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(records)
+  );
+}
+
 function renderTimeline() {
 
-  const list = document.getElementById('timelineList');
-  const records = loadRecords();
+  const list =
+    document.getElementById('timelineList');
+
+  const records =
+    loadRecords();
 
   if (!records.length) {
+
     list.innerHTML = `
       <div class="empty">
         まだ記録がありません。<br>
         「記録する」から残してみてください。
       </div>
     `;
+
     return;
   }
 
@@ -918,6 +1185,7 @@ function renderTimeline() {
     }
 
     grouped[record.date].push(record);
+
   });
 
   list.textContent = '';
@@ -927,7 +1195,8 @@ function renderTimeline() {
     .reverse()
     .forEach(date => {
 
-      const dateEl = document.createElement('div');
+      const dateEl =
+        document.createElement('div');
 
       dateEl.className = 'timeline-date';
       dateEl.textContent = formatDate(date);
@@ -936,27 +1205,38 @@ function renderTimeline() {
 
       grouped[date].forEach(record => {
 
-        const card = document.createElement('div');
+        const card =
+          document.createElement('div');
+
         card.className = 'timeline-card';
 
-        const mood = document.createElement('div');
-        mood.className = 'mood';
-        mood.textContent = record.mood;
+        const mood =
+          document.createElement('div');
 
-        const p = document.createElement('p');
+        mood.className = 'mood';
+
+        mood.textContent =
+          `${record.mood}　・　気分 ${record.score || 6}/10`;
+
+        const p =
+          document.createElement('p');
+
         p.textContent = record.text;
 
         card.appendChild(mood);
         card.appendChild(p);
 
         list.appendChild(card);
+
       });
+
     });
 }
 
 function formatDate(dateString) {
 
-  const [y, m, d] = dateString.split('-');
+  const [y, m, d] =
+    dateString.split('-');
 
   return `${y}年${Number(m)}月${Number(d)}日`;
 }
@@ -972,22 +1252,38 @@ function updateHomeWeather() {
   const today = todayString();
 
   const todayRecords =
-    records.filter(record => record.date === today);
+    records.filter(
+      record => record.date === today
+    );
 
   if (todayRecords.length) {
 
+    const latest =
+      todayRecords[todayRecords.length - 1];
+
+    let icon = '🌥️';
+    let name = 'くもり';
+
+    if (latest.score >= 8) {
+      icon = '☀️';
+      name = '晴れ';
+    } else if (latest.score <= 4) {
+      icon = '🌧️';
+      name = '雨';
+    }
+
     document.getElementById(
       'homeWeatherIcon'
-    ).textContent = '🌥️';
+    ).textContent = icon;
 
     document.getElementById(
       'homeWeatherName'
-    ).textContent = 'くもり';
+    ).textContent = name;
 
     document.getElementById(
       'homeWeatherScore'
     ).textContent =
-      '気分 6 / 10　・　今日の記録より';
+      `気分 ${latest.score || 6} / 10　・　今日の記録より`;
 
     return;
   }
@@ -1046,7 +1342,8 @@ function selectMood(button, mood) {
 
 function addBubble(text, type) {
 
-  const box = document.getElementById('chatBox');
+  const box =
+    document.getElementById('chatBox');
 
   const bubble =
     document.createElement('div');
@@ -1061,12 +1358,57 @@ function addBubble(text, type) {
   box.scrollTop = box.scrollHeight;
 }
 
+function loadDemoChat() {
+
+  if (chatHistory.length) return;
+
+  addBubble(
+    '今日は友達と話せて楽しかった。でも帰ってから課題をやろうと思ったのに、スマホを触ってしまった。',
+    'user'
+  );
+
+  addBubble(
+    '楽しかったことと、ちょっと反省していることが両方あった日なんだね。今日はどっちのほうが印象に残ってる？',
+    'ai'
+  );
+
+  addBubble(
+    'たぶん友達と話したこと。話してたら元気になった。',
+    'user'
+  );
+
+  addBubble(
+    'それはいい時間だったんだね。こういう「思ったより元気になったこと」も、記録しておくと後から見返したときに面白そう。',
+    'ai'
+  );
+
+  chatHistory = [
+    {
+      role: 'user',
+      text: '今日は友達と話せて楽しかった。でも帰ってから課題をやろうと思ったのに、スマホを触ってしまった。'
+    },
+    {
+      role: 'ai',
+      text: '楽しかったことと、ちょっと反省していることが両方あった日なんだね。今日はどっちのほうが印象に残ってる？'
+    },
+    {
+      role: 'user',
+      text: 'たぶん友達と話したこと。話してたら元気になった。'
+    },
+    {
+      role: 'ai',
+      text: 'それはいい時間だったんだね。こういう「思ったより元気になったこと」も、記録しておくと後から見返したときに面白そう。'
+    }
+  ];
+}
+
 function sendChat() {
 
   const input =
     document.getElementById('chatInput');
 
-  const text = input.value.trim();
+  const text =
+    input.value.trim();
 
   if (!text) return;
 
@@ -1080,14 +1422,18 @@ function sendChat() {
 
   input.value = '';
 
-  document.getElementById('typing').hidden = false;
+  document.getElementById(
+    'typing'
+  ).hidden = false;
 
   setTimeout(() => {
 
     const reply =
       createLocalReply(text, selectedMood);
 
-    document.getElementById('typing').hidden = true;
+    document.getElementById(
+      'typing'
+    ).hidden = true;
 
     addBubble(reply, 'ai');
 
@@ -1187,63 +1533,63 @@ function createLocalReply(text, mood) {
 
 /* =========================================================
    ココロ天気グラフ
-   改善前のグラフ構成を維持
+   日別 → 1時間
+   月別 → 1日
+   年別 → 1ヶ月
 ========================================================= */
 
 let charts = {};
 let currentRange = 'day';
 
-
-/* X軸
-   日別   → 0時〜23時
-   月別   → 1日〜31日
-   年別   → 1月〜12月
-*/
-
 const graphData = {
 
+  /* 1日：24時間 */
+
   day: {
+
     labels: Array.from(
       { length: 24 },
       (_, i) => `${i}時`
     ),
 
     humidity: [
-      72,70,68,67,66,65,
-      67,69,72,74,76,78,
-      77,75,73,71,69,68,
-      70,72,74,76,75,73
+      78,79,80,78,76,74,
+      72,68,65,63,60,58,
+      56,57,59,61,64,67,
+      70,72,74,76,77,78
     ],
 
     weather: [
-      6,6,6,7,7,7,
-      6,6,7,7,8,8,
-      8,7,7,6,6,6,
-      5,5,6,6,6,6
+      2,2,2,2,2,2,
+      3,3,3,3,3,3,
+      3,3,2,2,2,2,
+      1,1,1,2,2,2
     ],
 
     pressure: [
-      1014,1014,1013,1013,1013,1012,
-      1012,1013,1013,1014,1014,1015,
-      1015,1014,1014,1013,1013,1012,
-      1012,1013,1013,1014,1014,1014
+      1008,1008,1009,1009,1010,1010,
+      1011,1011,1012,1013,1013,1014,
+      1014,1013,1012,1012,1011,1010,
+      1010,1009,1009,1008,1008,1008
     ],
 
     temp: [
       23,23,22,22,22,22,
       23,24,25,26,27,28,
-      29,29,28,27,26,25,
-      24,24,23,23,23,23
+      29,29,29,28,28,27,
+      26,25,25,24,24,23
     ],
 
     mood: [
-      5,5,5,5,4,4,
-      5,6,6,6,7,7,
-      7,8,8,7,7,6,
-      6,5,5,5,5,5
+      5,5,4,4,4,5,
+      5,6,6,7,7,7,
+      6,6,5,5,5,6,
+      7,7,6,5,5,5
     ]
   },
 
+
+  /* 1ヶ月：1日ごと */
 
   month: {
 
@@ -1285,6 +1631,8 @@ const graphData = {
   },
 
 
+  /* 1年：1ヶ月ごと */
+
   year: {
 
     labels: [
@@ -1321,7 +1669,9 @@ const graphData = {
 };
 
 
-/* グラフ共通設定 */
+/* =========================================================
+   グラフ共通設定
+========================================================= */
 
 function createCommonOptions() {
 
@@ -1332,6 +1682,7 @@ function createCommonOptions() {
     maintainAspectRatio: false,
 
     plugins: {
+
       legend: {
         labels: {
           color: '#ccc',
@@ -1340,24 +1691,24 @@ function createCommonOptions() {
           }
         }
       }
+
     },
 
     scales: {
 
       x: {
+
         ticks: {
           color: '#888',
+
           font: {
             size: 8
           },
 
-          /*
-           * 日別では24個あるので、
-           * すべて表示すると混みすぎるため
-           * 一定間隔で表示。
-           */
-          autoSkip: true,
-          maxTicksLimit: 12
+          autoSkip: false,
+
+          maxRotation: 45,
+          minRotation: 45
         },
 
         grid: {
@@ -1372,6 +1723,7 @@ function createCommonOptions() {
 
         ticks: {
           color: '#888',
+
           font: {
             size: 9
           }
@@ -1391,19 +1743,27 @@ function createCommonOptions() {
         max: 10,
 
         title: {
+
           display: true,
+
           text: '気分 (1:低 ～ 10:高)',
+
           color: '#3b82f6',
+
           font: {
             size: 9
           }
+
         },
 
         ticks: {
+
           color: '#60a5fa',
+
           font: {
             size: 9
           },
+
           stepSize: 1
         },
 
@@ -1411,12 +1771,15 @@ function createCommonOptions() {
           drawOnChartArea: false
         }
       }
+
     }
   };
 }
 
 
-/* グラフ生成 */
+/* =========================================================
+   グラフ生成
+========================================================= */
 
 function makeChart(
   id,
@@ -1440,6 +1803,7 @@ function makeChart(
       datasets: [
 
         {
+
           label: weatherLabel,
 
           data: weatherData,
@@ -1451,9 +1815,11 @@ function makeChart(
           tension: .3,
 
           yAxisID: 'y'
+
         },
 
         {
+
           label: '気分',
 
           data: moodData,
@@ -1465,33 +1831,41 @@ function makeChart(
           tension: .3,
 
           yAxisID: 'yMood'
+
         }
 
       ]
+
     },
 
     options: createCommonOptions()
+
   });
 }
 
 
-/* グラフ破棄 */
+/* =========================================================
+   グラフ破棄
+========================================================= */
 
 function destroyCharts() {
 
-  Object.values(charts).forEach(chart => {
+  Object.values(charts)
+    .forEach(chart => {
 
-    if (chart) {
-      chart.destroy();
-    }
+      if (chart) {
+        chart.destroy();
+      }
 
-  });
+    });
 
   charts = {};
 }
 
 
-/* 日・月・年切り替え */
+/* =========================================================
+   日・月・年切り替え
+========================================================= */
 
 function updateAllCharts(range) {
 
@@ -1553,6 +1927,7 @@ function updateAllCharts(range) {
 
 renderTimeline();
 updateHomeWeather();
+loadDemoChat();
 updateAllCharts('day');
 
 </script>
