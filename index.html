@@ -2314,6 +2314,7 @@ let selectedMood = '';
 
 let chatHistory = [];
 
+let actualRecordMessages = [];
 
 function selectMood(button, mood) {
 
@@ -2436,15 +2437,18 @@ function sendChat() {
   );
 
 
-  chatHistory.push({
+ chatHistory.push({
 
-    role: 'user',
+  role: 'user',
 
-    text,
+  text,
 
-    mood: selectedMood
+  mood: selectedMood
 
-  });
+});
+
+// 今回の記録として保存するメッセージにも追加
+actualRecordMessages.push(text);
 
 
   input.value = '';
@@ -2456,6 +2460,79 @@ function sendChat() {
 
 
   setTimeout(() => {
+
+    function saveCurrentRecord() {
+
+  if (!actualRecordMessages.length) {
+    alert('今日のことを少し書いてから保存してください。');
+    return;
+  }
+
+  const now = new Date();
+
+  const time =
+    `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  const mood =
+    selectedMood || '落ち着いている';
+
+  const record = {
+
+    date: todayString(),
+
+    time,
+
+    mood,
+
+    score: getMoodScore(mood),
+
+    text: actualRecordMessages.join('\n\n')
+
+  };
+
+  const records =
+    loadRecords();
+
+  records.unshift(record);
+
+  saveRecords(records);
+
+  // 今回保存した分をリセット
+  actualRecordMessages = [];
+
+  // タイムラインとホームを更新
+  renderTimeline();
+  updateHomeWeather();
+
+  alert('今日の記録を保存しました。');
+
+}
+
+    function getMoodScore(mood) {
+
+  const scores = {
+
+    '嬉しい・喜び': 8,
+
+    '楽しい・ワクワク': 8,
+
+    '落ち着いている': 6,
+
+    'モヤモヤする': 5,
+
+    'イライラ・怒り': 4,
+
+    '不安・悲しみ': 4,
+
+    '客観的な視点': 6,
+
+    '事実の整理': 6
+
+  };
+
+  return scores[mood] || 6;
+
+}
 
     const reply =
       createLocalReply(
