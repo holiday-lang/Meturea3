@@ -1241,75 +1241,66 @@ function renderTimeline() {
   const records =
     loadRecords();
 
-  if (!records.length) {
+grouped[date].forEach(record => {
 
-    list.innerHTML = `
-      <div class="empty">
-        まだ記録がありません。<br>
-        「記録する」から残してみてください。
-      </div>
-    `;
+  const card =
+    document.createElement('div');
 
-    return;
+  card.className = 'timeline-card';
+
+  const mood =
+    document.createElement('div');
+
+  mood.className = 'mood';
+
+  mood.textContent =
+    `${record.mood}　・　気分 ${record.score || 6}/10`;
+
+  const p =
+    document.createElement('p');
+
+  p.textContent = record.text;
+
+  // 天気・気温・湿度・気圧・時刻
+  const weatherInfo =
+    document.createElement('div');
+
+  weatherInfo.className = 'timeline-weather';
+
+  const conditions = [];
+
+  if (record.weather) {
+    conditions.push(record.weather);
   }
 
-  const grouped = {};
+  if (record.temperature !== undefined) {
+    conditions.push(`${record.temperature}℃`);
+  }
 
-  records.forEach(record => {
+  if (record.humidity !== undefined) {
+    conditions.push(`湿度 ${record.humidity}%`);
+  }
 
-    if (!grouped[record.date]) {
-      grouped[record.date] = [];
-    }
+  if (record.pressure !== undefined) {
+    conditions.push(`気圧 ${record.pressure}hPa`);
+  }
 
-    grouped[record.date].push(record);
+  if (record.time) {
+    conditions.push(record.time);
+  }
 
-  });
+  weatherInfo.textContent =
+    conditions.join('　');
 
-  list.textContent = '';
+  card.appendChild(mood);
+  card.appendChild(p);
+  card.appendChild(weatherInfo);
 
-  Object.keys(grouped)
-    .sort()
-    .reverse()
-    .forEach(date => {
+  list.appendChild(card);
 
-      const dateEl =
-        document.createElement('div');
+});
 
-      dateEl.className = 'timeline-date';
-      dateEl.textContent = formatDate(date);
-
-      list.appendChild(dateEl);
-
-      grouped[date].forEach(record => {
-
-        const card =
-          document.createElement('div');
-
-        card.className = 'timeline-card';
-
-        const mood =
-          document.createElement('div');
-
-        mood.className = 'mood';
-
-        mood.textContent =
-          `${record.mood}　・　気分 ${record.score || 6}/10`;
-
-        const p =
-          document.createElement('p');
-
-        p.textContent = record.text;
-
-        card.appendChild(mood);
-        card.appendChild(p);
-
-        list.appendChild(card);
-
-      });
-
-    });
-}
-
+ 
 function formatDate(dateString) {
 
   const [y, m, d] =
