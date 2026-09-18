@@ -4,569 +4,532 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meturea 3</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  * { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-  :root {
-    --bg: #101114;
-    --panel: #181a1f;
-    --panel2: #20232a;
-    --line: #30343d;
-    --text: #f2f3f5;
-    --muted: #a7abb5;
-    --accent: #b8a7ff;
-    --accent2: #8fd6c8;
-    --danger: #e9a0a0;
+:root {
+  --bg: #101114;
+  --panel: #181a1f;
+  --panel2: #20232a;
+  --line: #30343d;
+  --text: #f2f3f5;
+  --muted: #a7abb5;
+  --accent: #b8a7ff;
+  --accent2: #8fd6c8;
+  --danger: #e9a0a0;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  width: min(760px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 18px 50px;
+}
+
+header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16, 17, 20, .94);
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  font-size: 22px;
+  letter-spacing: .03em;
+  font-weight: 700;
+}
+
+.logo strong {
+  color: var(--accent);
+}
+
+.menu-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 22px;
+}
+
+.menu-btn:hover {
+  background: var(--panel2);
+}
+
+main {
+  padding-top: 14px;
+}
+
+.screen {
+  display: none;
+  animation: fade .18s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes fade {
+  from {
+    opacity: .2;
+    transform: translateY(4px);
   }
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont,
-      "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero {
+  padding: 34px 8px 22px;
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 13px;
+}
+
+.weather-icon {
+  font-size: 62px;
+  line-height: 1.1;
+  margin-bottom: 7px;
+}
+
+.weather-name {
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.weather-score {
+  color: var(--muted);
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 13px 0;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-sub {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.big-item {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+.soft {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.primary {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  padding: 14px 16px;
+  margin-top: 14px;
+  background: var(--accent);
+  color: #16131f;
+  font-weight: 700;
+}
+
+.secondary {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 10px 14px;
+  background: var(--panel2);
+  color: var(--text);
+}
+
+.screen-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 19px;
+}
+
+.screen-head h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+/* menu */
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(0, 0, 0, .48);
+  display: none;
+}
+
+.menu-overlay.open {
+  display: block;
+}
+
+.menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(340px, 88vw);
+  height: 100%;
+  padding: 22px;
+  background: #15171b;
+  border-left: 1px solid var(--line);
+  box-shadow: -20px 0 50px rgba(0, 0, 0, .3);
+  animation: slide .18s ease;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(25px);
+    opacity: .5;
   }
 
-  button, input, textarea {
-    font: inherit;
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
+}
 
-  button {
-    cursor: pointer;
-  }
+.menu-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
 
-  .app {
-    width: min(760px, 100%);
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: 0 18px 50px;
-  }
+.menu-top h2 {
+  margin: 0;
+  font-size: 20px;
+}
 
-  header {
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(16,17,20,.94);
-    backdrop-filter: blur(12px);
-  }
+.close-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 20px;
+}
 
-  .logo {
-    font-size: 22px;
-    letter-spacing: .03em;
-    font-weight: 700;
-  }
+.menu-item {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  padding: 17px 6px;
+  font-size: 15px;
+}
 
-  .logo strong {
-    color: var(--accent);
-  }
+.menu-item:hover {
+  background: var(--panel);
+  border-radius: 10px;
+}
 
-  .menu-btn {
-    width: 44px;
-    height: 44px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--panel);
-    color: var(--text);
-    font-size: 22px;
-  }
+.menu-item small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 11px;
+}
 
-  .menu-btn:hover {
-    background: var(--panel2);
-  }
+/* chat */
 
-  main {
-    padding-top: 14px;
-  }
+.chat-box {
+  min-height: 390px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 6px 0;
+}
 
-  .screen {
-    display: none;
-    animation: fade .18s ease;
-  }
+.bubble {
+  max-width: 86%;
+  padding: 12px 14px;
+  border-radius: 17px;
+  margin: 9px 0;
+  white-space: pre-wrap;
+  line-height: 1.65;
+  font-size: 14px;
+}
 
-  .screen.active {
-    display: block;
-  }
+.bubble.user {
+  margin-left: auto;
+  background: #2a2735;
+  border: 1px solid #3a354b;
+}
 
-  @keyframes fade {
-    from {
-      opacity: .2;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+.bubble.ai {
+  margin-right: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
 
-  .hero {
-    padding: 34px 8px 22px;
-    text-align: center;
-  }
+.typing {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 8px 4px;
+}
 
-  .eyebrow {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 13px;
-  }
+.chips {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 4px 0 10px;
+}
 
-  .weather-icon {
-    font-size: 62px;
-    line-height: 1.1;
-    margin-bottom: 7px;
-  }
+.chip {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
 
-  .weather-name {
-    font-size: 27px;
-    font-weight: 700;
-  }
+.chip.selected {
+  color: var(--text);
+  border-color: var(--accent);
+}
 
-  .weather-score {
-    color: var(--muted);
-    margin-top: 8px;
-    font-size: 14px;
-  }
+.chat-row {
+  display: flex;
+  gap: 8px;
+}
 
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 20px;
-    margin: 13px 0;
-  }
+.chat-row input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+  color: var(--text);
+  padding: 13px;
+  outline: none;
+}
 
-  .card-title {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
+.chat-row button {
+  width: 72px;
+  border: 0;
+  border-radius: 15px;
+  background: var(--accent);
+  color: #16131f;
+  font-weight: 700;
+}
 
-  .card-sub {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.7;
-  }
+/* timeline */
 
-  .big-item {
-    font-size: 19px;
-    font-weight: 700;
-    margin: 6px 0;
-  }
+.timeline-date {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 23px 0 8px;
+}
 
-  .soft {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.7;
-  }
+.timeline-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 15px;
+  margin-bottom: 9px;
+}
 
-  .primary {
-    width: 100%;
-    border: 0;
-    border-radius: 15px;
-    padding: 14px 16px;
-    margin-top: 14px;
-    background: var(--accent);
-    color: #16131f;
-    font-weight: 700;
-  }
+.timeline-card .mood {
+  color: var(--accent2);
+  font-size: 12px;
+  margin-bottom: 7px;
+}
 
-  .secondary {
-    border: 1px solid var(--line);
-    border-radius: 13px;
-    padding: 10px 14px;
-    background: var(--panel2);
-    color: var(--text);
-  }
+.timeline-card p {
+  margin: 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
 
-  .screen-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 12px 0 20px;
-  }
-
-  .back-btn {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--panel);
-    color: var(--text);
-    font-size: 19px;
-  }
-
-  .screen-head h1 {
-    font-size: 22px;
-    margin: 0;
-  }
-
-  /* menu */
-
-  .menu-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    background: rgba(0,0,0,.48);
-    display: none;
-  }
-
-  .menu-overlay.open {
-    display: block;
-  }
-
-  .menu-panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: min(340px, 88vw);
-    height: 100%;
-    padding: 22px;
-    background: #15171b;
-    border-left: 1px solid var(--line);
-    box-shadow: -20px 0 50px rgba(0,0,0,.3);
-    animation: slide .18s ease;
-  }
-
-  @keyframes slide {
-    from {
-      transform: translateX(25px);
-      opacity: .5;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  .menu-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-  }
-
-  .menu-top h2 {
-    margin: 0;
-    font-size: 20px;
-  }
-
-  .close-btn {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--panel);
-    color: var(--text);
-    font-size: 20px;
-  }
-
-  .menu-item {
-    width: 100%;
-    text-align: left;
-    border: 0;
-    border-bottom: 1px solid var(--line);
-    background: transparent;
-    color: var(--text);
-    padding: 17px 6px;
-    font-size: 15px;
-  }
-
-  .menu-item:hover {
-    background: var(--panel);
-    border-radius: 10px;
-  }
-
-  .menu-item small {
-    display: block;
-    color: var(--muted);
-    margin-top: 4px;
-    font-size: 11px;
-  }
-
-  /* chat */
-
-  .chat-box {
-    min-height: 390px;
-    max-height: 55vh;
-    overflow-y: auto;
-    padding: 6px 0;
-  }
-
-  .bubble {
-    max-width: 86%;
-    padding: 12px 14px;
-    border-radius: 17px;
-    margin: 9px 0;
-    white-space: pre-wrap;
-    line-height: 1.65;
-    font-size: 14px;
-  }
-
-  .bubble.user {
-    margin-left: auto;
-    background: #2a2735;
-    border: 1px solid #3a354b;
-  }
-
-  .bubble.ai {
-    margin-right: auto;
-    background: var(--panel);
-    border: 1px solid var(--line);
-  }
-
-  .typing {
-    color: var(--muted);
-    font-size: 13px;
-    padding: 8px 4px;
-  }
-
-  .chips {
-    display: flex;
-    gap: 7px;
-    overflow-x: auto;
-    padding: 4px 0 10px;
-  }
-
-  .chip {
-    flex: 0 0 auto;
-    border: 1px solid var(--line);
-    background: var(--panel);
-    color: var(--muted);
-    border-radius: 999px;
-    padding: 7px 11px;
-    font-size: 12px;
-  }
-
-  .chip.selected {
-    color: var(--text);
-    border-color: var(--accent);
-  }
-
-  .chat-row {
-    display: flex;
-    gap: 8px;
-  }
-
-  .chat-row input {
-    min-width: 0;
-    flex: 1;
-    border: 1px solid var(--line);
-    border-radius: 15px;
-    background: var(--panel);
-    color: var(--text);
-    padding: 13px;
-    outline: none;
-  }
-
-  .chat-row button {
-    width: 72px;
-    border: 0;
-    border-radius: 15px;
-    background: var(--accent);
-    color: #16131f;
-    font-weight: 700;
-  }
-
-  /* timeline */
-
-  .timeline-date {
-    color: var(--muted);
-    font-size: 13px;
-    margin: 23px 0 8px;
-  }
-
-  .timeline-card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 17px;
-    padding: 15px;
-    margin-bottom: 9px;
-  }
-
-  .timeline-card .mood {
-    color: var(--accent2);
-    font-size: 12px;
-    margin-bottom: 7px;
-  }
-
-  .timeline-card p {
-    margin: 0;
-    line-height: 1.7;
-    white-space: pre-wrap;
-  }
- 
-  .timeline-weather {
+.timeline-weather {
   color: var(--muted);
   font-size: 11px;
   margin-top: 10px;
   line-height: 1.5;
- }
+}
 
-  /* weather */
+/* weather */
 
-  .graph-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.graph-title {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #d1d5db;
+}
+
+.mode-btn {
+  background: #121214;
+  border: 1px solid #2a2a32;
+  color: #888;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 280px;
+  margin-top: 12px;
+}
+
+/* summary */
+
+.summary-list {
+  margin: 0;
+  padding-left: 19px;
+}
+
+.summary-list li {
+  margin: 10px 0;
+  line-height: 1.7;
+}
+
+.summary-highlight {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 0 13px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.tag {
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.shift-item {
+  margin-bottom: 18px;
+}
+
+.shift-item:last-child {
+  margin-bottom: 0;
+}
+
+.shift-date {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.shift-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 50px 15px;
+  line-height: 1.8;
+}
+
+@media (max-width: 520px) {
+  .app {
+    padding-left: 13px;
+    padding-right: 13px;
   }
 
-  .graph-title {
-    font-size: 0.85em;
-    font-weight: 500;
-    color: #d1d5db;
+  .hero {
+    padding-top: 24px;
   }
 
-  .mode-btn {
-    background: #121214;
-    border: 1px solid #2a2a32;
-    color: #888;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.75em;
-    cursor: pointer;
+  .card {
+    border-radius: 17px;
   }
-
-  .mode-btn.active {
-    background: #3b82f6;
-    color: #fff;
-    border-color: #3b82f6;
-  }
-
-  .chart-wrap {
-    position: relative;
-    height: 280px;
-    margin-top: 12px;
-  }
-
-  /* summary */
-
-  .summary-list {
-    margin: 0;
-    padding-left: 19px;
-  }
-
-  .summary-list li {
-    margin: 10px 0;
-    line-height: 1.7;
-  }
-
-  .summary-highlight {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 5px 0 13px;
-  }
-
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-top: 12px;
-  }
-
-  .tag {
-    border: 1px solid var(--line);
-    background: var(--panel2);
-    color: var(--muted);
-    border-radius: 999px;
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .shift-item {
-    margin-bottom: 18px;
-  }
-
-  .shift-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .shift-date {
-    color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 5px;
-  }
-
-  .shift-title {
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .empty {
-    text-align: center;
-    color: var(--muted);
-    padding: 50px 15px;
-    line-height: 1.8;
-  }
-
-  .record-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 40;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-    background: rgba(0,0,0,.65);
-  }
-
-  .record-modal.open {
-    display: flex;
-  }
-
-  .modal-card {
-    width: min(560px, 100%);
-    background: #181a1f;
-    border: 1px solid var(--line);
-    border-radius: 22px;
-    padding: 20px;
-  }
-
-  .modal-card h2 {
-    margin-top: 0;
-  }
-
-  textarea {
-    width: 100%;
-    min-height: 130px;
-    resize: vertical;
-    border: 1px solid var(--line);
-    border-radius: 15px;
-    background: var(--bg);
-    color: var(--text);
-    padding: 13px;
-    outline: none;
-  }
-
-  .modal-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-
-  .modal-actions button {
-    flex: 1;
-  }
-
-  @media (max-width: 520px) {
-    .app {
-      padding-left: 13px;
-      padding-right: 13px;
-    }
-
-    .hero {
-      padding-top: 24px;
-    }
-
-    .card {
-      border-radius: 17px;
-    }
-  }
+}
 </style>
 </head>
 
@@ -576,97 +539,215 @@
 
 <header>
   <div class="logo">Metur<strong>ea</strong></div>
-  <button class="menu-btn" id="menuBtn" aria-label="メニューを開く">☰</button>
+
+  <button
+    class="menu-btn"
+    id="menuBtn"
+    aria-label="メニューを開く"
+  >
+    ☰
+  </button>
 </header>
 
 <main>
 
 <!-- HOME -->
+
 <section class="screen active" id="homeScreen">
 
   <div class="hero">
+
     <div class="eyebrow">今日のココロ</div>
-    <div class="weather-icon" id="homeWeatherIcon">🌥️</div>
-    <div class="weather-name" id="homeWeatherName">くもり</div>
+
+    <div class="weather-icon" id="homeWeatherIcon">
+      🌥️
+    </div>
+
+    <div class="weather-name" id="homeWeatherName">
+      くもり
+    </div>
+
     <div class="weather-score" id="homeWeatherScore">
       気分 6 / 10　・　今日の記録より
     </div>
+
   </div>
 
   <div class="card">
-    <div class="card-title">今日のおとも</div>
-    <div class="big-item" id="companionTitle">温かい飲み物</div>
+
+    <div class="card-title">
+      今日のおとも
+    </div>
+
+    <div class="big-item" id="companionTitle">
+      温かい飲み物
+    </div>
+
     <div class="card-sub" id="companionText">
       ほうじ茶でもココアでも。少しゆっくりする時間のおともに。
     </div>
+
   </div>
 
   <div class="card">
-    <div class="card-title">今日の過ごし方</div>
-    <div class="big-item" id="dayTipTitle">10分くらい休憩</div>
+
+    <div class="card-title">
+      今日の過ごし方
+    </div>
+
+    <div class="big-item" id="dayTipTitle">
+      10分くらい休憩
+    </div>
+
     <div class="card-sub" id="dayTipText">
       何もしない時間を少し作ってみる。
     </div>
+
   </div>
 
   <div class="card">
-    <div class="card-title">今日の小さなミッション</div>
-    <div class="big-item">今日の印象に残ったことを一言</div>
+
+    <div class="card-title">
+      今日の小さなミッション
+    </div>
+
+    <div class="big-item">
+      今日の印象に残ったことを一言
+    </div>
+
     <div class="card-sub">
       できたら記録しておく。やらなくても大丈夫。
     </div>
+
   </div>
 
 </section>
 
 
 <!-- CHAT -->
+
 <section class="screen" id="chatScreen">
 
   <div class="screen-head">
-    <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+
+    <button
+      class="back-btn"
+      onclick="showScreen('homeScreen')"
+    >
+      ←
+    </button>
+
     <h1>記録する</h1>
+
   </div>
 
   <div class="card">
+
     <div class="card-sub">
       その日のことや、今思っていることをそのまま残せます。
     </div>
+
   </div>
 
   <div class="chat-box" id="chatBox"></div>
-  <div class="typing" id="typing" hidden>考え中…</div>
+
+  <div class="typing" id="typing" hidden>
+    考え中…
+  </div>
 
   <div class="chips" id="moodChips">
-    <button class="chip" onclick="selectMood(this,'嬉しい・喜び')">嬉しい・喜び</button>
-    <button class="chip" onclick="selectMood(this,'楽しい・ワクワク')">楽しい・ワクワク</button>
-    <button class="chip" onclick="selectMood(this,'落ち着いている')">落ち着いている</button>
-    <button class="chip" onclick="selectMood(this,'モヤモヤする')">モヤモヤする</button>
-    <button class="chip" onclick="selectMood(this,'イライラ・怒り')">イライラ・怒り</button>
-    <button class="chip" onclick="selectMood(this,'不安・悲しみ')">不安・悲しみ</button>
-    <button class="chip" onclick="selectMood(this,'客観的な視点')">客観的な視点</button>
-    <button class="chip" onclick="selectMood(this,'事実の整理')">事実の整理</button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'嬉しい・喜び')"
+    >
+      嬉しい・喜び
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'楽しい・ワクワク')"
+    >
+      楽しい・ワクワク
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'落ち着いている')"
+    >
+      落ち着いている
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'モヤモヤする')"
+    >
+      モヤモヤする
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'イライラ・怒り')"
+    >
+      イライラ・怒り
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'不安・悲しみ')"
+    >
+      不安・悲しみ
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'客観的な視点')"
+    >
+      客観的な視点
+    </button>
+
+    <button
+      class="chip"
+      onclick="selectMood(this,'事実の整理')"
+    >
+      事実の整理
+    </button>
+
   </div>
 
   <div class="chat-row">
+
     <input
       id="chatInput"
       type="text"
       placeholder="今思っていることを書く…"
       autocomplete="off"
     >
-    <button onclick="sendChat()">送る</button>
+
+    <button onclick="sendChat()">
+      送る
+    </button>
+
   </div>
 
 </section>
 
 
 <!-- TIMELINE -->
+
 <section class="screen" id="timelineScreen">
 
   <div class="screen-head">
-    <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+
+    <button
+      class="back-btn"
+      onclick="showScreen('homeScreen')"
+    >
+      ←
+    </button>
+
     <h1>タイムライン</h1>
+
   </div>
 
   <div id="timelineList"></div>
@@ -675,97 +756,174 @@
 
 
 <!-- WEATHER -->
+
 <section class="screen" id="weatherScreen">
 
   <div class="screen-head">
-    <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+
+    <button
+      class="back-btn"
+      onclick="showScreen('homeScreen')"
+    >
+      ←
+    </button>
+
     <h1>ココロ天気</h1>
+
   </div>
 
-  <div style="display:flex; justify-content:flex-end; gap:6px; margin-bottom:12px;">
-    <button id="btn-day" class="mode-btn active" onclick="updateAllCharts('day')">
+  <div
+    style="display:flex; justify-content:flex-end; gap:6px; margin-bottom:12px;"
+  >
+
+    <button
+      id="btn-day"
+      class="mode-btn active"
+      onclick="updateAllCharts('day')"
+    >
       日
     </button>
 
-    <button id="btn-month" class="mode-btn" onclick="updateAllCharts('month')">
+    <button
+      id="btn-month"
+      class="mode-btn"
+      onclick="updateAllCharts('month')"
+    >
       月
     </button>
 
-    <button id="btn-year" class="mode-btn" onclick="updateAllCharts('year')">
+    <button
+      id="btn-year"
+      class="mode-btn"
+      onclick="updateAllCharts('year')"
+    >
       年
     </button>
+
   </div>
 
 
   <div class="card">
+
     <div class="graph-header">
-      <span class="graph-title">1. 気分と湿度の相関</span>
+      <span class="graph-title">
+        1. 気分と湿度の相関
+      </span>
     </div>
+
     <div class="chart-wrap">
       <canvas id="chartHumidity"></canvas>
     </div>
+
   </div>
 
 
   <div class="card">
+
     <div class="graph-header">
-      <span class="graph-title">2. 気分と天候（晴・曇・雨）の相関</span>
+      <span class="graph-title">
+        2. 気分と天候（晴・曇・雨）の相関
+      </span>
     </div>
+
     <div class="chart-wrap">
       <canvas id="chartWeather"></canvas>
     </div>
+
   </div>
 
 
   <div class="card">
+
     <div class="graph-header">
-      <span class="graph-title">3. 気分と気圧の相関</span>
+      <span class="graph-title">
+        3. 気分と気圧の相関
+      </span>
     </div>
+
     <div class="chart-wrap">
       <canvas id="chartPressure"></canvas>
     </div>
+
   </div>
 
 
   <div class="card">
+
     <div class="graph-header">
-      <span class="graph-title">4. 気分と気温の相関</span>
+      <span class="graph-title">
+        4. 気分と気温の相関
+      </span>
     </div>
+
     <div class="chart-wrap">
       <canvas id="chartTemp"></canvas>
     </div>
+
   </div>
 
 </section>
 
 
 <!-- SUMMARY -->
+
 <section class="screen" id="summaryScreen">
 
   <div class="screen-head">
-    <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+
+    <button
+      class="back-btn"
+      onclick="showScreen('homeScreen')"
+    >
+      ←
+    </button>
+
     <h1>思考まとめ</h1>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">最近の記録から</div>
+
+    <div class="card-title">
+      最近の記録から
+    </div>
 
     <div class="summary-highlight">
       「ちゃんとしたい」と「少し休みたい」が両方ある
     </div>
 
     <ul class="summary-list">
-      <li>やることが多いと、始める前に少し疲れてしまうことがある。</li>
-      <li>友達と話した日や、好きなことをした日は気分が上がりやすい。</li>
-      <li>一度に全部終わらせるより、小さく区切ったほうが動きやすそう。</li>
-      <li>将来のことを考える時間が増えている。</li>
+
+      <li>
+        やることが多いと、始める前に少し疲れてしまうことがある。
+      </li>
+
+      <li>
+        友達と話した日や、好きなことをした日は気分が上がりやすい。
+      </li>
+
+      <li>
+        一度に全部終わらせるより、小さく区切ったほうが動きやすそう。
+      </li>
+
+      <li>
+        将来のことを考える時間が増えている。
+      </li>
+
     </ul>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">最近よく出てくる言葉</div>
+
+    <div class="card-title">
+      最近よく出てくる言葉
+    </div>
 
     <div class="tag-list">
+
       <span class="tag">勉強</span>
       <span class="tag">学校</span>
       <span class="tag">友達</span>
@@ -773,125 +931,235 @@
       <span class="tag">疲れた</span>
       <span class="tag">楽しい</span>
       <span class="tag">やりたい</span>
+
     </div>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">最近増えている考え</div>
+
+    <div class="card-title">
+      最近増えている考え
+    </div>
 
     <ul class="summary-list">
-      <li>「将来、自分は何をしたいんだろう」</li>
-      <li>「やりたいことをもっと見つけたい」</li>
-      <li>「自分の時間をもう少しうまく使いたい」</li>
+
+      <li>
+        「将来、自分は何をしたいんだろう」
+      </li>
+
+      <li>
+        「やりたいことをもっと見つけたい」
+      </li>
+
+      <li>
+        「自分の時間をもう少しうまく使いたい」
+      </li>
+
     </ul>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">最近減っている考え</div>
+
+    <div class="card-title">
+      最近減っている考え
+    </div>
 
     <ul class="summary-list">
-      <li>「全部完璧にやらないと意味がない」</li>
-      <li>「一日何もできなかったら失敗」</li>
+
+      <li>
+        「全部完璧にやらないと意味がない」
+      </li>
+
+      <li>
+        「一日何もできなかったら失敗」
+      </li>
+
     </ul>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">このページについて</div>
+
+    <div class="card-title">
+      このページについて
+    </div>
 
     <div class="soft">
       記録をもとに「こういう傾向があるかも」と眺めるためのページです。
       断定や診断をするものではありません。
     </div>
+
   </div>
 
 </section>
 
 
 <!-- SHIFT -->
+
 <section class="screen" id="shiftScreen">
 
   <div class="screen-head">
-    <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+
+    <button
+      class="back-btn"
+      onclick="showScreen('homeScreen')"
+    >
+      ←
+    </button>
+
     <h1>思考・興味の移り変わり</h1>
+
   </div>
 
+
   <div class="card">
-    <div class="card-title">最近気になったこと</div>
+
+    <div class="card-title">
+      最近気になったこと
+    </div>
+
 
     <div class="timeline-card">
-      <div class="mood">今</div>
+
+      <div class="mood">
+        今
+      </div>
+
       <p>
 ゲーム制作や創作について考える時間が増えている。
 「自分で何かを作る」ということ自体が楽しく感じられている。
       </p>
+
     </div>
 
+
     <div class="timeline-card">
-      <div class="mood">少し前</div>
+
+      <div class="mood">
+        少し前
+      </div>
+
       <p>
 将来のことを考えることが多かった。
 進路について調べたり、自分が何をしたいのか考えたりしていた。
       </p>
+
     </div>
+
   </div>
 
 
   <div class="card">
-    <div class="card-title">移り変わりを見る</div>
+
+    <div class="card-title">
+      移り変わりを見る
+    </div>
+
 
     <div class="shift-item">
-      <div class="shift-date">6月</div>
-      <div class="shift-title">学校・勉強</div>
+
+      <div class="shift-date">
+        6月
+      </div>
+
+      <div class="shift-title">
+        学校・勉強
+      </div>
+
       <div class="soft">
         日々の勉強や学校生活について考える記録が多かった。
       </div>
+
     </div>
 
+
     <div class="shift-item">
-      <div class="shift-date">7月</div>
-      <div class="shift-title">趣味・ゲーム</div>
+
+      <div class="shift-date">
+        7月
+      </div>
+
+      <div class="shift-title">
+        趣味・ゲーム
+      </div>
+
       <div class="soft">
         ゲームや創作について考える時間が増えた。
       </div>
+
     </div>
 
+
     <div class="shift-item">
-      <div class="shift-date">8月</div>
-      <div class="shift-title">将来・進路</div>
+
+      <div class="shift-date">
+        8月
+      </div>
+
+      <div class="shift-title">
+        将来・進路
+      </div>
+
       <div class="soft">
         「これから何をしたいか」というテーマが目立つようになった。
       </div>
+
     </div>
 
+
     <div class="shift-item">
-      <div class="shift-date">9月</div>
-      <div class="shift-title">ゲーム制作・創作</div>
+
+      <div class="shift-date">
+        9月
+      </div>
+
+      <div class="shift-title">
+        ゲーム制作・創作
+      </div>
+
       <div class="soft">
         自分で世界や仕組みを作ることへの興味が強くなっている。
       </div>
+
     </div>
+
   </div>
 
 
   <div class="card">
-    <div class="card-title">最近強くなった興味</div>
+
+    <div class="card-title">
+      最近強くなった興味
+    </div>
 
     <div class="tag-list">
+
       <span class="tag">ゲーム制作</span>
       <span class="tag">創作</span>
       <span class="tag">世界観づくり</span>
       <span class="tag">新しい趣味</span>
+
     </div>
+
   </div>
 
 
   <div class="card">
-    <div class="card-title">最近あまり考えなくなったこと</div>
+
+    <div class="card-title">
+      最近あまり考えなくなったこと
+    </div>
 
     <div class="soft">
       学校行事や、その時期に一時的に気になっていたことは、
       最近の記録では少なくなっています。
     </div>
+
   </div>
 
 </section>
@@ -901,12 +1169,15 @@
 
 
 <!-- MENU -->
+
 <div class="menu-overlay" id="menuOverlay">
 
   <aside class="menu-panel">
 
     <div class="menu-top">
+
       <h2>MENU</h2>
+
       <button
         class="close-btn"
         onclick="closeMenu()"
@@ -914,45 +1185,91 @@
       >
         ×
       </button>
+
     </div>
 
-    <button class="menu-item" onclick="openMenuScreen('chatScreen')">
+
+    <button
+      class="menu-item"
+      onclick="openMenuScreen('chatScreen')"
+    >
       記録する
-      <small>その日のことや思っていることを残す</small>
+
+      <small>
+        その日のことや思っていることを残す
+      </small>
+
     </button>
 
-    <button class="menu-item" onclick="openMenuScreen('timelineScreen')">
+
+    <button
+      class="menu-item"
+      onclick="openMenuScreen('timelineScreen')"
+    >
       タイムライン
-      <small>これまでの記録を時系列で見る</small>
+
+      <small>
+        これまでの記録を時系列で見る
+      </small>
+
     </button>
 
-    <button class="menu-item" onclick="openMenuScreen('weatherScreen')">
+
+    <button
+      class="menu-item"
+      onclick="openMenuScreen('weatherScreen')"
+    >
       ココロ天気
-      <small>気分の変化をグラフで見る</small>
+
+      <small>
+        気分の変化をグラフで見る
+      </small>
+
     </button>
 
-    <button class="menu-item" onclick="openMenuScreen('summaryScreen')">
+
+    <button
+      class="menu-item"
+      onclick="openMenuScreen('summaryScreen')"
+    >
       思考まとめ
-      <small>最近の記録を整理して見る</small>
+
+      <small>
+        最近の記録を整理して見る
+      </small>
+
     </button>
 
-    <button class="menu-item" onclick="openMenuScreen('shiftScreen')">
+
+    <button
+      class="menu-item"
+      onclick="openMenuScreen('shiftScreen')"
+    >
       思考・興味の移り変わり
-      <small>気になっていることの変化を見る</small>
+
+      <small>
+        気になっていることの変化を見る
+      </small>
+
     </button>
 
   </aside>
+
 </div>
 
 
 <script>
 
 /* =========================================================
-   画面・メニュー
+画面・メニュー
 ========================================================= */
 
-const screens = document.querySelectorAll('.screen');
-const menuOverlay = document.getElementById('menuOverlay');
+const screens =
+  document.querySelectorAll('.screen');
+
+const menuOverlay =
+  document.getElementById('menuOverlay');
+
 
 function showScreen(id) {
 
@@ -960,7 +1277,12 @@ function showScreen(id) {
     screen.classList.remove('active');
   });
 
-  document.getElementById(id).classList.add('active');
+  const target =
+    document.getElementById(id);
+
+  if (target) {
+    target.classList.add('active');
+  }
 
   window.scrollTo({
     top: 0,
@@ -968,17 +1290,21 @@ function showScreen(id) {
   });
 }
 
+
 function openMenu() {
   menuOverlay.classList.add('open');
 }
+
 
 function closeMenu() {
   menuOverlay.classList.remove('open');
 }
 
+
 function openMenuScreen(id) {
 
   closeMenu();
+
   showScreen(id);
 
   if (id === 'weatherScreen') {
@@ -990,22 +1316,24 @@ function openMenuScreen(id) {
   }
 }
 
-document.getElementById('menuBtn').addEventListener(
-  'click',
-  openMenu
-);
 
-menuOverlay.addEventListener('click', e => {
+document
+  .getElementById('menuBtn')
+  .addEventListener('click', openMenu);
 
-  if (e.target === menuOverlay) {
+
+menuOverlay.addEventListener('click', event => {
+
+  if (event.target === menuOverlay) {
     closeMenu();
   }
 
 });
 
-document.addEventListener('keydown', e => {
 
-  if (e.key === 'Escape') {
+document.addEventListener('keydown', event => {
+
+  if (event.key === 'Escape') {
     closeMenu();
   }
 
@@ -1013,10 +1341,57 @@ document.addEventListener('keydown', e => {
 
 
 /* =========================================================
-   架空の記録データ
+日付ヘルパー
+========================================================= */
+
+function todayString() {
+
+  const d = new Date();
+
+  const y =
+    d.getFullYear();
+
+  const m =
+    String(d.getMonth() + 1)
+      .padStart(2, '0');
+
+  const day =
+    String(d.getDate())
+      .padStart(2, '0');
+
+  return `${y}-${m}-${day}`;
+}
+
+
+function offsetDate(days) {
+
+  const d = new Date();
+
+  d.setDate(
+    d.getDate() + days
+  );
+
+  const y =
+    d.getFullYear();
+
+  const m =
+    String(d.getMonth() + 1)
+      .padStart(2, '0');
+
+  const day =
+    String(d.getDate())
+      .padStart(2, '0');
+
+  return `${y}-${m}-${day}`;
+}
+
+
+/* =========================================================
+架空の記録データ
 ========================================================= */
 
 const DEMO_RECORDS = [
+
   {
     date: todayString(),
     time: '13:42',
@@ -1026,8 +1401,10 @@ const DEMO_RECORDS = [
     temperature: 27,
     humidity: 68,
     pressure: 1009,
-    text: '朝は少し眠かった。学校では友達と話せて楽しかったけど、午後から少し疲れた。帰ってから課題をやろうと思っていたのに、スマホを触ってしまった。でも寝る前に少しだけ進められたので、今日はまあまあ。'
+    text:
+      '朝は少し眠かった。学校では友達と話せて楽しかったけど、午後から少し疲れた。帰ってから課題をやろうと思っていたのに、スマホを触ってしまった。でも寝る前に少しだけ進められたので、今日はまあまあ。'
   },
+
   {
     date: offsetDate(-1),
     time: '18:16',
@@ -1037,8 +1414,10 @@ const DEMO_RECORDS = [
     temperature: 28,
     humidity: 61,
     pressure: 1013,
-    text: '友達と話していたら思ったより元気になった。くだらない話だったけど、こういう時間はやっぱり楽しい。'
+    text:
+      '友達と話していたら思ったより元気になった。くだらない話だったけど、こういう時間はやっぱり楽しい。'
   },
+
   {
     date: offsetDate(-2),
     time: '22:08',
@@ -1048,8 +1427,10 @@ const DEMO_RECORDS = [
     temperature: 23,
     humidity: 82,
     pressure: 998,
-    text: 'なんとなく将来のことを考えてしまった。まだ何も決まっていない感じがして少し落ち着かない。'
+    text:
+      'なんとなく将来のことを考えてしまった。まだ何も決まっていない感じがして少し落ち着かない。'
   },
+
   {
     date: offsetDate(-3),
     time: '20:35',
@@ -1059,8 +1440,10 @@ const DEMO_RECORDS = [
     temperature: 25,
     humidity: 70,
     pressure: 1007,
-    text: '特に大きなことはなかった普通の日。やることは多かったけど、一つずつ片づけたら意外となんとかなった。'
+    text:
+      '特に大きなことはなかった普通の日。やることは多かったけど、一つずつ片づけたら意外となんとかなった。'
   },
+
   {
     date: offsetDate(-4),
     time: '21:24',
@@ -1070,8 +1453,10 @@ const DEMO_RECORDS = [
     temperature: 29,
     humidity: 58,
     pressure: 1015,
-    text: '久しぶりにゲームを長めに遊んだ。遊ぶだけじゃなくて、自分でもこういうゲームを作れたら面白そうだと思った。'
+    text:
+      '久しぶりにゲームを長めに遊んだ。遊ぶだけじゃなくて、自分でもこういうゲームを作れたら面白そうだと思った。'
   },
+
   {
     date: offsetDate(-5),
     time: '19:51',
@@ -1081,8 +1466,10 @@ const DEMO_RECORDS = [
     temperature: 26,
     humidity: 73,
     pressure: 1005,
-    text: 'やりたいことはあるのに、何から始めればいいのかわからなくなった。結局あまり進まなかった。'
+    text:
+      'やりたいことはあるのに、何から始めればいいのかわからなくなった。結局あまり進まなかった。'
   },
+
   {
     date: offsetDate(-6),
     time: '17:43',
@@ -1092,8 +1479,10 @@ const DEMO_RECORDS = [
     temperature: 27,
     humidity: 64,
     pressure: 1011,
-    text: '前から気になっていたことを少し調べた。知らなかったことがわかると、それだけでちょっと楽しい。'
+    text:
+      '前から気になっていたことを少し調べた。知らなかったことがわかると、それだけでちょっと楽しい。'
   },
+
   {
     date: offsetDate(-7),
     time: '21:05',
@@ -1103,8 +1492,10 @@ const DEMO_RECORDS = [
     temperature: 24,
     humidity: 69,
     pressure: 1010,
-    text: '今日は比較的ゆっくり過ごせた。何もしない時間もあったけど、必要な休憩だった気がする。'
+    text:
+      '今日は比較的ゆっくり過ごせた。何もしない時間もあったけど、必要な休憩だった気がする。'
   },
+
   {
     date: offsetDate(-9),
     time: '22:17',
@@ -1114,8 +1505,10 @@ const DEMO_RECORDS = [
     temperature: 22,
     humidity: 86,
     pressure: 997,
-    text: '進路について考えた。ちゃんと決めなきゃと思うほど、逆に何も考えられなくなる感じがした。'
+    text:
+      '進路について考えた。ちゃんと決めなきゃと思うほど、逆に何も考えられなくなる感じがした。'
   },
+
   {
     date: offsetDate(-11),
     time: '19:28',
@@ -1125,8 +1518,10 @@ const DEMO_RECORDS = [
     temperature: 28,
     humidity: 55,
     pressure: 1017,
-    text: '創作についていろいろ考えた。設定を考えているだけでも意外と時間が経っていてびっくりした。'
+    text:
+      '創作についていろいろ考えた。設定を考えているだけでも意外と時間が経っていてびっくりした。'
   },
+
   {
     date: offsetDate(-14),
     time: '18:52',
@@ -1136,8 +1531,10 @@ const DEMO_RECORDS = [
     temperature: 25,
     humidity: 71,
     pressure: 1004,
-    text: '勉強しようと思ったのに、なかなか集中できなかった。できなかったことばかり考えると余計に嫌になるので、今日は少しだけにした。'
+    text:
+      '勉強しようと思ったのに、なかなか集中できなかった。できなかったことばかり考えると余計に嫌になるので、今日は少しだけにした。'
   },
+
   {
     date: offsetDate(-18),
     time: '20:11',
@@ -1147,8 +1544,10 @@ const DEMO_RECORDS = [
     temperature: 26,
     humidity: 60,
     pressure: 1014,
-    text: '好きな作品を見つけた。久しぶりに「これちょっと好きかも」と思えるものがあった。'
+    text:
+      '好きな作品を見つけた。久しぶりに「これちょっと好きかも」と思えるものがあった。'
   },
+
   {
     date: offsetDate(-22),
     time: '16:37',
@@ -1158,8 +1557,10 @@ const DEMO_RECORDS = [
     temperature: 27,
     humidity: 63,
     pressure: 1016,
-    text: '普通の日だったけど、最近より少し余裕があった。焦らずやれば意外と大丈夫なのかもしれない。'
+    text:
+      '普通の日だったけど、最近より少し余裕があった。焦らずやれば意外と大丈夫なのかもしれない。'
   },
+
   {
     date: offsetDate(-27),
     time: '22:43',
@@ -1169,61 +1570,47 @@ const DEMO_RECORDS = [
     temperature: 21,
     humidity: 88,
     pressure: 996,
-    text: '将来について考える時間が増えた。まだ答えは出ていないけど、いろいろ調べてみることにした。'
+    text:
+      '将来について考える時間が増えた。まだ答えは出ていないけど、いろいろ調べてみることにした。'
   }
+
 ];
 
 
 /* =========================================================
-   日付ヘルパー
+ローカル記録
 ========================================================= */
 
-function todayString() {
+const STORAGE_KEY =
+  'meturea3_records';
 
-  const d = new Date();
-
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-
-  return `${y}-${m}-${day}`;
-}
-
-function offsetDate(days) {
-
-  const d = new Date();
-
-  d.setDate(d.getDate() + days);
-
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-
-  return `${y}-${m}-${day}`;
-}
-
-
-/* =========================================================
-   ローカル記録
-========================================================= */
-
-const STORAGE_KEY = 'meturea3_records';
 
 function loadRecords() {
 
   try {
 
     const saved =
-      JSON.parse(localStorage.getItem(STORAGE_KEY));
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      );
 
-    if (Array.isArray(saved) && saved.length) {
+    if (
+      Array.isArray(saved) &&
+      saved.length
+    ) {
       return saved;
     }
 
-  } catch {}
+  } catch (error) {
+    console.warn(
+      '保存データを読み込めませんでした。',
+      error
+    );
+  }
 
   return DEMO_RECORDS;
 }
+
 
 function saveRecords(records) {
 
@@ -1231,76 +1618,14 @@ function saveRecords(records) {
     STORAGE_KEY,
     JSON.stringify(records)
   );
+
 }
 
-function renderTimeline() {
 
-  const list =
-    document.getElementById('timelineList');
+/* =========================================================
+タイムライン
+========================================================= */
 
-  const records =
-    loadRecords();
-
-grouped[date].forEach(record => {
-
-  const card =
-    document.createElement('div');
-
-  card.className = 'timeline-card';
-
-  const mood =
-    document.createElement('div');
-
-  mood.className = 'mood';
-
-  mood.textContent =
-    `${record.mood}　・　気分 ${record.score || 6}/10`;
-
-  const p =
-    document.createElement('p');
-
-  p.textContent = record.text;
-
-  // 天気・気温・湿度・気圧・時刻
-  const weatherInfo =
-    document.createElement('div');
-
-  weatherInfo.className = 'timeline-weather';
-
-  const conditions = [];
-
-  if (record.weather) {
-    conditions.push(record.weather);
-  }
-
-  if (record.temperature !== undefined) {
-    conditions.push(`${record.temperature}℃`);
-  }
-
-  if (record.humidity !== undefined) {
-    conditions.push(`湿度 ${record.humidity}%`);
-  }
-
-  if (record.pressure !== undefined) {
-    conditions.push(`気圧 ${record.pressure}hPa`);
-  }
-
-  if (record.time) {
-    conditions.push(record.time);
-  }
-
-  weatherInfo.textContent =
-    conditions.join('　');
-
-  card.appendChild(mood);
-  card.appendChild(p);
-  card.appendChild(weatherInfo);
-
-  list.appendChild(card);
-
-});
-
- 
 function formatDate(dateString) {
 
   const [y, m, d] =
@@ -1310,51 +1635,229 @@ function formatDate(dateString) {
 }
 
 
+function renderTimeline() {
+
+  const list =
+    document.getElementById(
+      'timelineList'
+    );
+
+  const records =
+    loadRecords();
+
+  if (!records.length) {
+
+    list.innerHTML = `
+      <div class="empty">
+        まだ記録がありません。<br>
+        「記録する」から残してみてください。
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const grouped = {};
+
+
+  records.forEach(record => {
+
+    if (!grouped[record.date]) {
+      grouped[record.date] = [];
+    }
+
+    grouped[record.date].push(record);
+
+  });
+
+
+  list.textContent = '';
+
+
+  Object.keys(grouped)
+    .sort()
+    .reverse()
+    .forEach(date => {
+
+      const dateEl =
+        document.createElement('div');
+
+      dateEl.className =
+        'timeline-date';
+
+      dateEl.textContent =
+        formatDate(date);
+
+      list.appendChild(dateEl);
+
+
+      grouped[date].forEach(record => {
+
+        const card =
+          document.createElement('div');
+
+        card.className =
+          'timeline-card';
+
+
+        const mood =
+          document.createElement('div');
+
+        mood.className =
+          'mood';
+
+        mood.textContent =
+          `${record.mood}　・　気分 ${record.score || 6}/10`;
+
+
+        const p =
+          document.createElement('p');
+
+        p.textContent =
+          record.text || '';
+
+
+        const weatherInfo =
+          document.createElement('div');
+
+        weatherInfo.className =
+          'timeline-weather';
+
+
+        const conditions = [];
+
+
+        if (record.weather) {
+          conditions.push(
+            record.weather
+          );
+        }
+
+
+        if (
+          record.temperature !== undefined &&
+          record.temperature !== null
+        ) {
+          conditions.push(
+            `${record.temperature}℃`
+          );
+        }
+
+
+        if (
+          record.humidity !== undefined &&
+          record.humidity !== null
+        ) {
+          conditions.push(
+            `湿度 ${record.humidity}%`
+          );
+        }
+
+
+        if (
+          record.pressure !== undefined &&
+          record.pressure !== null
+        ) {
+          conditions.push(
+            `気圧 ${record.pressure}hPa`
+          );
+        }
+
+
+        if (record.time) {
+          conditions.push(
+            record.time
+          );
+        }
+
+
+        weatherInfo.textContent =
+          conditions.join('　');
+
+
+        card.appendChild(mood);
+        card.appendChild(p);
+
+
+        if (conditions.length) {
+          card.appendChild(
+            weatherInfo
+          );
+        }
+
+
+        list.appendChild(card);
+
+      });
+
+    });
+
+}
+
+
 /* =========================================================
-   今日のココロ天気
+今日のココロ天気
 ========================================================= */
 
 function updateHomeWeather() {
 
-  const records = loadRecords();
-  const today = todayString();
+  const records =
+    loadRecords();
+
+  const today =
+    todayString();
 
   const todayRecords =
     records.filter(
       record => record.date === today
     );
 
+
   if (todayRecords.length) {
 
     const latest =
-      todayRecords[todayRecords.length - 1];
+      todayRecords[
+        todayRecords.length - 1
+      ];
+
 
     let icon = '🌥️';
     let name = 'くもり';
 
+
     if (latest.score >= 8) {
+
       icon = '☀️';
       name = '晴れ';
+
     } else if (latest.score <= 4) {
+
       icon = '🌧️';
       name = '雨';
+
     }
+
 
     document.getElementById(
       'homeWeatherIcon'
     ).textContent = icon;
 
+
     document.getElementById(
       'homeWeatherName'
     ).textContent = name;
+
 
     document.getElementById(
       'homeWeatherScore'
     ).textContent =
       `気分 ${latest.score || 6} / 10　・　今日の記録より`;
 
+
     return;
   }
+
 
   if (records.length >= 3) {
 
@@ -1362,9 +1865,11 @@ function updateHomeWeather() {
       'homeWeatherIcon'
     ).textContent = '🌤️';
 
+
     document.getElementById(
       'homeWeatherName'
     ).textContent = '参考予想';
+
 
     document.getElementById(
       'homeWeatherScore'
@@ -1377,41 +1882,52 @@ function updateHomeWeather() {
       'homeWeatherIcon'
     ).textContent = '❔';
 
+
     document.getElementById(
       'homeWeatherName'
     ).textContent = 'まだわからない';
+
 
     document.getElementById(
       'homeWeatherScore'
     ).textContent =
       '今日の記録があると、ここに反映されます';
+
   }
+
 }
 
 
 /* =========================================================
-   無料版チャット
+無料版チャット
 ========================================================= */
 
 let selectedMood = '';
+
 let chatHistory = [];
+
 
 function selectMood(button, mood) {
 
-  document.querySelectorAll('.chip')
+  document
+    .querySelectorAll('.chip')
     .forEach(chip => {
       chip.classList.remove('selected');
     });
+
 
   button.classList.add('selected');
 
   selectedMood = mood;
 }
 
+
 function addBubble(text, type) {
 
   const box =
-    document.getElementById('chatBox');
+    document.getElementById(
+      'chatBox'
+    );
 
   const bubble =
     document.createElement('div');
@@ -1419,108 +1935,164 @@ function addBubble(text, type) {
   bubble.className =
     `bubble ${type}`;
 
-  bubble.textContent = text;
+  bubble.textContent =
+    text;
 
   box.appendChild(bubble);
 
-  box.scrollTop = box.scrollHeight;
+  box.scrollTop =
+    box.scrollHeight;
 }
+
 
 function loadDemoChat() {
 
-  if (chatHistory.length) return;
+  if (chatHistory.length) {
+    return;
+  }
+
 
   addBubble(
     '今日は友達と話せて楽しかった。でも帰ってから課題をやろうと思ったのに、スマホを触ってしまった。',
     'user'
   );
 
+
   addBubble(
     '楽しかったことと、ちょっと反省していることが両方あった日なんだね。今日はどっちのほうが印象に残ってる？',
     'ai'
   );
+
 
   addBubble(
     'たぶん友達と話したこと。話してたら元気になった。',
     'user'
   );
 
+
   addBubble(
     'それはいい時間だったんだね。こういう「思ったより元気になったこと」も、記録しておくと後から見返したときに面白そう。',
     'ai'
   );
 
+
   chatHistory = [
+
     {
       role: 'user',
-      text: '今日は友達と話せて楽しかった。でも帰ってから課題をやろうと思ったのに、スマホを触ってしまった。'
+      text:
+        '今日は友達と話せて楽しかった。でも帰ってから課題をやろうと思ったのに、スマホを触ってしまった。'
     },
+
     {
       role: 'ai',
-      text: '楽しかったことと、ちょっと反省していることが両方あった日なんだね。今日はどっちのほうが印象に残ってる？'
+      text:
+        '楽しかったことと、ちょっと反省していることが両方あった日なんだね。今日はどっちのほうが印象に残ってる？'
     },
+
     {
       role: 'user',
-      text: 'たぶん友達と話したこと。話してたら元気になった。'
+      text:
+        'たぶん友達と話したこと。話してたら元気になった。'
     },
+
     {
       role: 'ai',
-      text: 'それはいい時間だったんだね。こういう「思ったより元気になったこと」も、記録しておくと後から見返したときに面白そう。'
+      text:
+        'それはいい時間だったんだね。こういう「思ったより元気になったこと」も、記録しておくと後から見返したときに面白そう。'
     }
+
   ];
 }
+
 
 function sendChat() {
 
   const input =
-    document.getElementById('chatInput');
+    document.getElementById(
+      'chatInput'
+    );
 
   const text =
     input.value.trim();
 
-  if (!text) return;
 
-  addBubble(text, 'user');
+  if (!text) {
+    return;
+  }
+
+
+  addBubble(
+    text,
+    'user'
+  );
+
 
   chatHistory.push({
+
     role: 'user',
+
     text,
+
     mood: selectedMood
+
   });
 
+
   input.value = '';
+
 
   document.getElementById(
     'typing'
   ).hidden = false;
 
+
   setTimeout(() => {
 
     const reply =
-      createLocalReply(text, selectedMood);
+      createLocalReply(
+        text,
+        selectedMood
+      );
+
 
     document.getElementById(
       'typing'
     ).hidden = true;
 
-    addBubble(reply, 'ai');
+
+    addBubble(
+      reply,
+      'ai'
+    );
+
 
     chatHistory.push({
+
       role: 'ai',
+
       text: reply
+
     });
 
   }, 500 + Math.random() * 500);
+
 }
 
-document.getElementById('chatInput')
-  .addEventListener('keydown', e => {
 
-    if (e.key === 'Enter') {
-      sendChat();
+document
+  .getElementById('chatInput')
+  .addEventListener(
+    'keydown',
+    event => {
+
+      if (event.key === 'Enter') {
+        sendChat();
+      }
+
     }
+  );
 
-  });
 
 function createLocalReply(text, mood) {
 
@@ -1531,83 +2103,142 @@ function createLocalReply(text, mood) {
   ) {
 
     if (/疲れ|つかれ/.test(text)) {
+
       return '疲れているときは、まず少し休むのがいいと思う。今すぐ片づけなくても大丈夫なことなら、いったん置いておくのもあり。';
+
     }
+
 
     if (/勉強|宿題/.test(text)) {
+
       return 'やることを一気に終わらせようとせず、「まず10分だけ」みたいに区切ると始めやすいよ。';
+
     }
 
+
     if (/眠|寝/.test(text)) {
+
       return '眠いなら、無理に起き続けるより休めるなら休むほうが自然。今すぐ寝られない事情があるなら、できる範囲で負担を減らしてみて。';
+
     }
+
   }
+
 
   const previous =
     [...chatHistory]
       .reverse()
-      .find(x => x.role === 'user');
+      .find(
+        x => x.role === 'user'
+      );
+
 
   const hasHistory =
-    chatHistory.filter(x => x.role === 'user').length > 1;
+    chatHistory.filter(
+      x => x.role === 'user'
+    ).length > 1;
+
 
   if (
     hasHistory &&
     previous &&
     /そう|それ|うん|ほんと|本当|たしかに/.test(text)
   ) {
+
     return 'うん、その流れならさっきの話ともつながってそう。無理に結論を出さず、そのまま話しててもいいよ。';
+
   }
 
-  if (/嬉しい|うれしい|最高|楽しい|楽しかった|ワクワク/.test(text)) {
+
+  if (
+    /嬉しい|うれしい|最高|楽しい|楽しかった|ワクワク/.test(text)
+  ) {
+
     return 'それはいいね。そういう日は、あとから思い出せるように一言だけ残しておくのもよさそう。';
+
   }
 
-  if (/疲れ|しんど|だる/.test(text)) {
+
+  if (
+    /疲れ|しんど|だる/.test(text)
+  ) {
+
     return '今日はちょっと消耗してる感じかな。今すぐ何か解決しなくても、少し力を抜く時間があっていいと思う。';
+
   }
 
-  if (/イライラ|むかつ|腹立/.test(text)) {
+
+  if (
+    /イライラ|むかつ|腹立/.test(text)
+  ) {
+
     return 'それは引っかかるね。今はきれいに整理しなくても、「ここが嫌だった」くらいから書いておくと後で見返しやすい。';
+
   }
 
-  if (/不安|心配|怖い/.test(text)) {
+
+  if (
+    /不安|心配|怖い/.test(text)
+  ) {
+
     return '不安なことって、考えているうちに話が大きくなりやすいよね。まず「実際に起きていること」と「まだ起きていないこと」を分けてみるのはあり。';
+
   }
 
-  if (/なんとなく|よくわからない|分からない|わからない/.test(text)) {
+
+  if (
+    /なんとなく|よくわからない|分からない|わからない/.test(text)
+  ) {
+
     return 'そういう「なんとなく」のままでも大丈夫。うまく説明しようとせず、浮かんだことから書いてみると意外と輪郭が出てくることがある。';
+
   }
+
 
   if (mood === '客観的な視点') {
+
     return 'じゃあ、少し距離を置いて見てみよう。まず「起きたこと」と「そこから考えたこと」を分けると整理しやすいよ。';
+
   }
+
 
   if (mood === '事実の整理') {
+
     return '了解。今は気持ちを評価するより、起きたことを順番に並べてみる感じでいこう。';
+
   }
+
 
   if (text.length <= 8) {
+
     return 'うん、聞いてるよ。';
+
   }
+
 
   if (text.length <= 25) {
+
     return 'なるほど。そこ、ちょっと気になるところだね。';
+
   }
 
+
   return 'なるほど、そういうことだったんだね。話の中でいくつか重なっているものがありそう。今は無理にまとめず、気になったところから続けて大丈夫だよ。';
+
 }
 
 
 /* =========================================================
-   ココロ天気グラフ
-   日別 → 1時間
-   月別 → 1日
-   年別 → 1ヶ月
+ココロ天気グラフ
+日別 → 1時間
+月別 → 1日
+年別 → 1ヶ月
 ========================================================= */
 
 let charts = {};
+
 let currentRange = 'day';
+
 
 const graphData = {
 
@@ -1654,6 +2285,7 @@ const graphData = {
       6,6,5,5,5,6,
       7,7,6,5,5,5
     ]
+
   },
 
 
@@ -1696,6 +2328,7 @@ const graphData = {
       6,5,8,7,4,3,6,9,5,7,
       8,2,4,6,9,7,5,3,6,8,5
     ]
+
   },
 
 
@@ -1732,13 +2365,14 @@ const graphData = {
       5,3,7,7,5,9,
       8,7,5,6,3,5
     ]
+
   }
 
 };
 
 
 /* =========================================================
-   グラフ共通設定
+グラフ共通設定
 ========================================================= */
 
 function createCommonOptions() {
@@ -1752,12 +2386,17 @@ function createCommonOptions() {
     plugins: {
 
       legend: {
+
         labels: {
+
           color: '#ccc',
+
           font: {
             size: 10
           }
+
         }
+
       }
 
     },
@@ -1767,6 +2406,7 @@ function createCommonOptions() {
       x: {
 
         ticks: {
+
           color: '#888',
 
           font: {
@@ -1776,38 +2416,47 @@ function createCommonOptions() {
           autoSkip: false,
 
           maxRotation: 45,
+
           minRotation: 45
+
         },
 
         grid: {
           color: '#2a2a32'
         }
+
       },
 
       y: {
 
         type: 'linear',
+
         position: 'left',
 
         ticks: {
+
           color: '#888',
 
           font: {
             size: 9
           }
+
         },
 
         grid: {
           color: '#2a2a32'
         }
+
       },
 
       yMood: {
 
         type: 'linear',
+
         position: 'right',
 
         min: 1,
+
         max: 10,
 
         title: {
@@ -1833,20 +2482,24 @@ function createCommonOptions() {
           },
 
           stepSize: 1
+
         },
 
         grid: {
           drawOnChartArea: false
         }
+
       }
 
     }
+
   };
+
 }
 
 
 /* =========================================================
-   グラフ生成
+グラフ生成
 ========================================================= */
 
 function makeChart(
@@ -1859,61 +2512,70 @@ function makeChart(
   const canvas =
     document.getElementById(id);
 
-  charts[id] = new Chart(canvas, {
 
-    type: 'line',
+  if (!canvas) {
+    return;
+  }
 
-    data: {
 
-      labels:
-        graphData[currentRange].labels,
+  charts[id] =
+    new Chart(canvas, {
 
-      datasets: [
+      type: 'line',
 
-        {
+      data: {
 
-          label: weatherLabel,
+        labels:
+          graphData[currentRange].labels,
 
-          data: weatherData,
+        datasets: [
 
-          borderColor: '#3b82f6',
+          {
 
-          borderWidth: 2,
+            label: weatherLabel,
 
-          tension: .3,
+            data: weatherData,
 
-          yAxisID: 'y'
+            borderColor: '#3b82f6',
 
-        },
+            borderWidth: 2,
 
-        {
+            tension: .3,
 
-          label: '気分',
+            yAxisID: 'y'
 
-          data: moodData,
+          },
 
-          borderColor: '#60a5fa',
+          {
 
-          borderWidth: 2,
+            label: '気分',
 
-          tension: .3,
+            data: moodData,
 
-          yAxisID: 'yMood'
+            borderColor: '#60a5fa',
 
-        }
+            borderWidth: 2,
 
-      ]
+            tension: .3,
 
-    },
+            yAxisID: 'yMood'
 
-    options: createCommonOptions()
+          }
 
-  });
+        ]
+
+      },
+
+      options:
+        createCommonOptions()
+
+    });
+
 }
 
 
 /* =========================================================
-   グラフ破棄
+グラフ破棄
 ========================================================= */
 
 function destroyCharts() {
@@ -1927,37 +2589,59 @@ function destroyCharts() {
 
     });
 
+
   charts = {};
+
 }
 
 
 /* =========================================================
-   日・月・年切り替え
+日・月・年切り替え
 ========================================================= */
 
 function updateAllCharts(range) {
 
-  currentRange = range;
+  if (!graphData[range]) {
+    return;
+  }
+
+
+  currentRange =
+    range;
+
 
   document
     .querySelectorAll('.mode-btn')
     .forEach(button => {
-      button.classList.remove('active');
+
+      button.classList.remove(
+        'active'
+      );
+
     });
+
 
   const activeButton =
     document.getElementById(
       'btn-' + range
     );
 
+
   if (activeButton) {
-    activeButton.classList.add('active');
+
+    activeButton.classList.add(
+      'active'
+    );
+
   }
+
 
   destroyCharts();
 
+
   const data =
     graphData[range];
+
 
   makeChart(
     'chartHumidity',
@@ -1966,12 +2650,14 @@ function updateAllCharts(range) {
     '湿度(%)'
   );
 
+
   makeChart(
     'chartWeather',
     data.weather,
     data.mood,
     '天候指数'
   );
+
 
   makeChart(
     'chartPressure',
@@ -1980,22 +2666,27 @@ function updateAllCharts(range) {
     '気圧(hPa)'
   );
 
+
   makeChart(
     'chartTemp',
     data.temp,
     data.mood,
     '気温(℃)'
   );
+
 }
 
 
 /* =========================================================
-   初期化
+初期化
 ========================================================= */
 
 renderTimeline();
+
 updateHomeWeather();
+
 loadDemoChat();
+
 updateAllCharts('day');
 
 </script>
