@@ -399,6 +399,13 @@
     line-height: 1.7;
     white-space: pre-wrap;
   }
+ 
+  .timeline-weather {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 10px;
+  line-height: 1.5;
+ }
 
   /* weather */
 
@@ -1012,86 +1019,156 @@ document.addEventListener('keydown', e => {
 const DEMO_RECORDS = [
   {
     date: todayString(),
+    time: '13:42',
     mood: '落ち着いている',
     score: 6,
+    weather: 'くもり',
+    temperature: 27,
+    humidity: 68,
+    pressure: 1009,
     text: '朝は少し眠かった。学校では友達と話せて楽しかったけど、午後から少し疲れた。帰ってから課題をやろうと思っていたのに、スマホを触ってしまった。でも寝る前に少しだけ進められたので、今日はまあまあ。'
   },
   {
     date: offsetDate(-1),
+    time: '18:16',
     mood: '嬉しい・喜び',
     score: 7,
+    weather: '晴れ',
+    temperature: 28,
+    humidity: 61,
+    pressure: 1013,
     text: '友達と話していたら思ったより元気になった。くだらない話だったけど、こういう時間はやっぱり楽しい。'
   },
   {
     date: offsetDate(-2),
+    time: '22:08',
     mood: '不安・悲しみ',
     score: 4,
+    weather: '雨',
+    temperature: 23,
+    humidity: 82,
+    pressure: 998,
     text: 'なんとなく将来のことを考えてしまった。まだ何も決まっていない感じがして少し落ち着かない。'
   },
   {
     date: offsetDate(-3),
+    time: '20:35',
     mood: '落ち着いている',
     score: 5,
+    weather: 'くもり',
+    temperature: 25,
+    humidity: 70,
+    pressure: 1007,
     text: '特に大きなことはなかった普通の日。やることは多かったけど、一つずつ片づけたら意外となんとかなった。'
   },
   {
     date: offsetDate(-4),
+    time: '21:24',
     mood: '楽しい・ワクワク',
     score: 8,
+    weather: '晴れ',
+    temperature: 29,
+    humidity: 58,
+    pressure: 1015,
     text: '久しぶりにゲームを長めに遊んだ。遊ぶだけじゃなくて、自分でもこういうゲームを作れたら面白そうだと思った。'
   },
   {
     date: offsetDate(-5),
+    time: '19:51',
     mood: 'モヤモヤする',
     score: 5,
+    weather: 'くもり',
+    temperature: 26,
+    humidity: 73,
+    pressure: 1005,
     text: 'やりたいことはあるのに、何から始めればいいのかわからなくなった。結局あまり進まなかった。'
   },
   {
     date: offsetDate(-6),
+    time: '17:43',
     mood: '嬉しい・喜び',
     score: 7,
+    weather: '晴れ',
+    temperature: 27,
+    humidity: 64,
+    pressure: 1011,
     text: '前から気になっていたことを少し調べた。知らなかったことがわかると、それだけでちょっと楽しい。'
   },
   {
     date: offsetDate(-7),
+    time: '21:05',
     mood: '落ち着いている',
     score: 6,
+    weather: 'くもり',
+    temperature: 24,
+    humidity: 69,
+    pressure: 1010,
     text: '今日は比較的ゆっくり過ごせた。何もしない時間もあったけど、必要な休憩だった気がする。'
   },
   {
     date: offsetDate(-9),
+    time: '22:17',
     mood: '不安・悲しみ',
     score: 4,
+    weather: '雨',
+    temperature: 22,
+    humidity: 86,
+    pressure: 997,
     text: '進路について考えた。ちゃんと決めなきゃと思うほど、逆に何も考えられなくなる感じがした。'
   },
   {
     date: offsetDate(-11),
+    time: '19:28',
     mood: '楽しい・ワクワク',
     score: 8,
+    weather: '晴れ',
+    temperature: 28,
+    humidity: 55,
+    pressure: 1017,
     text: '創作についていろいろ考えた。設定を考えているだけでも意外と時間が経っていてびっくりした。'
   },
   {
     date: offsetDate(-14),
+    time: '18:52',
     mood: 'モヤモヤする',
     score: 5,
+    weather: 'くもり',
+    temperature: 25,
+    humidity: 71,
+    pressure: 1004,
     text: '勉強しようと思ったのに、なかなか集中できなかった。できなかったことばかり考えると余計に嫌になるので、今日は少しだけにした。'
   },
   {
     date: offsetDate(-18),
+    time: '20:11',
     mood: '嬉しい・喜び',
     score: 7,
+    weather: '晴れ',
+    temperature: 26,
+    humidity: 60,
+    pressure: 1014,
     text: '好きな作品を見つけた。久しぶりに「これちょっと好きかも」と思えるものがあった。'
   },
   {
     date: offsetDate(-22),
+    time: '16:37',
     mood: '落ち着いている',
     score: 6,
+    weather: '晴れ',
+    temperature: 27,
+    humidity: 63,
+    pressure: 1016,
     text: '普通の日だったけど、最近より少し余裕があった。焦らずやれば意外と大丈夫なのかもしれない。'
   },
   {
     date: offsetDate(-27),
+    time: '22:43',
     mood: '不安・悲しみ',
     score: 4,
+    weather: '雨',
+    temperature: 21,
+    humidity: 88,
+    pressure: 996,
     text: '将来について考える時間が増えた。まだ答えは出ていないけど、いろいろ調べてみることにした。'
   }
 ];
